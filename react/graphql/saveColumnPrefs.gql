@@ -1,0 +1,11 @@
+mutation SaveColumnPrefs(
+  $entityName: String!
+  $schemaName: String!
+  $fields: [String!]!
+) {
+  saveColumnPrefs(
+    entityName: $entityName
+    schemaName: $schemaName
+    fields: $fields
+  )
+}

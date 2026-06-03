@@ -1,0 +1,37 @@
+{
+  "vendor": "account",
+  "name": "admin-masterdatav2",
+  "version": "1.0.0",
+  "title": "Master Data Admin",
+  "description": "Admin app for managing Master Data v2 entities",
+  "builders": {
+    "admin": "0.x",
+    "react": "3.x",
+    "node": "6.x",
+    "graphql": "2.x",
+    "messages": "1.x"
+  },
+  "dependencies": {
+    "vtex.styleguide": "9.x"
+  },
+  "policies": [
+    {
+      "name": "outbound-access",
+      "attrs": {
+        "host": "api.vtex.com",
+        "path": "/api/dataentities/*"
+      }
+    },
+    {
+      "name": "vbase-read-write"
+    },
+    {
+      "name": "outbound-access",
+      "attrs": {
+        "host": "portal.vtexcommercestable.com.br",
+        "path": "*"
+      }
+    }
+  ],
+  "$schema": "https://raw.githubusercontent.com/vtex/node-vtex-api/master/gen/manifest.schema"
+}

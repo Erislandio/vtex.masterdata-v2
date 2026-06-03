@@ -1,0 +1,67 @@
+type MasterDataRecord {
+  id: String!
+  dataEntityId: String!
+  fields: String!
+  createdIn: String
+  updatedIn: String
+  lastInteractionIn: String
+}
+
+type MasterDataSchema {
+  id: String!
+  name: String!
+  properties: String!
+}
+
+type MasterDataResponse {
+  data: [MasterDataRecord!]!
+  total: Int!
+}
+
+type AppEntity {
+  id: String!
+  entityName: String!
+  schemaName: String!
+  createdAt: String!
+}
+
+type Mutation {
+  # App entities (VBase)
+  saveEntity(entityName: String!, schemaName: String!): AppEntity
+    @auth(scope: PUBLIC)
+  deleteEntity(id: String!): Boolean @auth(scope: PUBLIC)
+  saveColumnPrefs(
+    entityName: String!
+    schemaName: String!
+    fields: [String!]!
+  ): Boolean @auth(scope: PUBLIC)
+
+  # Master Data records
+  createRecord(dataEntityId: String!, fields: String!): MasterDataRecord
+    @auth(scope: PUBLIC)
+  updateRecord(
+    dataEntityId: String!
+    id: String!
+    fields: String!
+  ): MasterDataRecord @auth(scope: PUBLIC)
+  deleteRecord(dataEntityId: String!, id: String!): Boolean @auth(scope: PUBLIC)
+}
+
+type Query {
+  # App entities (VBase)
+  getEntities: [AppEntity!]! @auth(scope: PUBLIC)
+  getColumnPrefs(entityName: String!, schemaName: String!): [String!]
+    @auth(scope: PUBLIC)
+
+  # Master Data records
+  getRecords(
+    dataEntityId: String!
+    page: Int
+    pageSize: Int
+    where: String
+    sort: String
+  ): MasterDataResponse @auth(scope: PUBLIC)
+  getRecord(dataEntityId: String!, id: String!): MasterDataRecord
+    @auth(scope: PUBLIC)
+  getSchema(dataEntityId: String!): MasterDataSchema @auth(scope: PUBLIC)
+}

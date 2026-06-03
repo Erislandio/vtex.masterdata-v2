@@ -1,0 +1,8 @@
+query GetEntities {
+  getEntities {
+    id
+    entityName
+    schemaName
+    createdAt
+  }
+}

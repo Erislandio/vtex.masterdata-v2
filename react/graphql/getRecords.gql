@@ -1,0 +1,25 @@
+query GetRecords(
+  $dataEntityId: String!
+  $page: Int
+  $pageSize: Int
+  $where: String
+  $sort: String
+) {
+  getRecords(
+    dataEntityId: $dataEntityId
+    page: $page
+    pageSize: $pageSize
+    where: $where
+    sort: $sort
+  ) {
+    data {
+      id
+      dataEntityId
+      fields
+      createdIn
+      updatedIn
+      lastInteractionIn
+    }
+    total
+  }
+}

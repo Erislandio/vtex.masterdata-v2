@@ -1,0 +1,3 @@
+mutation DeleteRecord($dataEntityId: String!, $id: String!) {
+  deleteRecord(dataEntityId: $dataEntityId, id: $id)
+}

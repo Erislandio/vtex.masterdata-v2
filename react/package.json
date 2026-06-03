@@ -1,0 +1,22 @@
+{
+  "name": "admin-masterdatav2-react",
+  "version": "1.0.0",
+  "description": "React frontend for Master Data v2 Admin",
+  "license": "VTEX",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "react": "^17.0.0",
+    "react-apollo": "^3.1.5",
+    "react-intl": "^4.7.2",
+    "graphql": "^15.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.0",
+    "@types/react": "^17.0.0",
+    "typescript": "3.9.7",
+    "vtex.render-runtime": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.render-runtime@8.136.2/public/@types/vtex.render-runtime",
+    "vtex.styleguide": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.styleguide@9.146.16/public/@types/vtex.styleguide"
+  }
+}

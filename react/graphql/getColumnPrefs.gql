@@ -1,0 +1,3 @@
+query GetColumnPrefs($entityName: String!, $schemaName: String!) {
+  getColumnPrefs(entityName: $entityName, schemaName: $schemaName)
+}

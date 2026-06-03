@@ -1,0 +1,7 @@
+mutation CreateRecord($dataEntityId: String!, $fields: String!) {
+  createRecord(dataEntityId: $dataEntityId, fields: $fields) {
+    id
+    dataEntityId
+    fields
+  }
+}

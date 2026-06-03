@@ -1,0 +1,14 @@
+{
+  "admin.app.masterdatav2": {
+    "component": "AdminApp",
+    "path": "/admin/app/masterdatav2"
+  },
+  "admin.app.masterdatav2-schema": {
+    "component": "SchemaPage",
+    "path": "/admin/app/masterdatav2-schema"
+  },
+  "admin.app.masterdatav2-records": {
+    "component": "RecordsPage",
+    "path": "/admin/app/masterdatav2-records"
+  }
+}

@@ -1,0 +1,13 @@
+node/node_modules
+node/dist
+react/node_modules
+react/node_modules/*
+node_modules
+
+node_modules/
+.editorconfig
+.eslintrc
+.gitignore
+README.md
+
+**/node_modules/**

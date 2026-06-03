@@ -1,0 +1,13 @@
+[
+  {
+    "section": "storeSettings",
+    "subSection": "storeFront",
+    "adminVersion": 4,
+    "subSectionItems": [
+      {
+        "labelId": "admin/masterdatav2/navigation",
+        "path": "/admin/masterdatav2/"
+      }
+    ]
+  }
+]

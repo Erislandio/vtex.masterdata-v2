@@ -1,0 +1,10 @@
+query GetRecord($dataEntityId: String!, $id: String!) {
+  getRecord(dataEntityId: $dataEntityId, id: $id) {
+    id
+    dataEntityId
+    fields
+    createdIn
+    updatedIn
+    lastInteractionIn
+  }
+}

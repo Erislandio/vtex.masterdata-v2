@@ -1,0 +1,7 @@
+query GetSchema($dataEntityId: String!) {
+  getSchema(dataEntityId: $dataEntityId) {
+    id
+    name
+    properties
+  }
+}

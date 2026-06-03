@@ -1,0 +1,8 @@
+mutation SaveEntity($entityName: String!, $schemaName: String!) {
+  saveEntity(entityName: $entityName, schemaName: $schemaName) {
+    id
+    entityName
+    schemaName
+    createdAt
+  }
+}

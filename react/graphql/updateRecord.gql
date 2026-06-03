@@ -1,0 +1,11 @@
+mutation UpdateRecord(
+  $dataEntityId: String!
+  $id: String!
+  $fields: String!
+) {
+  updateRecord(dataEntityId: $dataEntityId, id: $id, fields: $fields) {
+    id
+    dataEntityId
+    fields
+  }
+}
