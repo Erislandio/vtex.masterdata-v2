@@ -7,7 +7,7 @@
     "build": "tsc"
   },
   "dependencies": {
-    "@vtex/api": "6.50.1"
+    "@vtex/api": "6.51.0"
   },
   "devDependencies": {
     "@vtex/tsconfig": "^0.5.6",

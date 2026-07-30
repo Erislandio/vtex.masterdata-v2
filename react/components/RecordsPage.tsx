@@ -285,10 +285,10 @@ const RecordsPage: React.FC<{ runtime: any }> = ({ runtime }) => {
       setIsModalOpen(false)
       showAlert('success', 'masterdatav2.success-save')
       load()
-    } catch (err: any) {
+    } catch (err) {
       if (
-        err.message &&
-        (err.message.includes('401') || err.message.includes('403'))
+        (err as any).message &&
+        ((err as any).message.includes('401') || (err as any).message.includes('403'))
       ) {
         showAlert('error', 'masterdatav2.unauthorized-error')
       } else {
@@ -308,10 +308,10 @@ const RecordsPage: React.FC<{ runtime: any }> = ({ runtime }) => {
       setIsDeleteModalOpen(false)
       showAlert('success', 'masterdatav2.success-delete')
       load()
-    } catch (err: any) {
+    } catch (err) {
       if (
-        err.message &&
-        (err.message.includes('401') || err.message.includes('403'))
+        (err as any).message &&
+        ((err as any).message.includes('401') || (err as any).message.includes('403'))
       ) {
         showAlert('error', 'masterdatav2.unauthorized-error')
       } else {

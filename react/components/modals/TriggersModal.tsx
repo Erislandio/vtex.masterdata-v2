@@ -100,8 +100,8 @@ export const TriggersModal: React.FC<TriggersModalProps> = ({
 
       await onSave(updatedSchema)
       setEditingTrigger(null)
-    } catch (err: any) {
-      setTriggerJsonError(err.message || 'Invalid JSON format')
+    } catch (err) {
+      setTriggerJsonError((err as any).message || 'Invalid JSON format')
     } finally {
       setSavingTrigger(false)
     }
@@ -154,10 +154,10 @@ export const TriggersModal: React.FC<TriggersModalProps> = ({
         type: 'success',
         message: `Test successful! (${res.status} ${res.statusText})`,
       })
-    } catch (err: any) {
+    } catch (err) {
       setTestResult({
         type: 'error',
-        message: `Test failed: ${err.message}. (Note: This might be due to CORS if the URL is external).`,
+        message: `Test failed: ${(err as any).message}. (Note: This might be due to CORS if the URL is external).`,
       })
     } finally {
       setTestingTrigger(null)

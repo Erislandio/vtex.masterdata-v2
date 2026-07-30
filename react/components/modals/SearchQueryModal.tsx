@@ -10,14 +10,14 @@ interface SearchQueryModalProps {
 }
 
 const OPERATORS = [
-  { value: '=', label: 'Equals (=)' },
-  { value: '<>', label: 'Not Equals (<>)' },
-  { value: '>', label: 'Greater Than (>)' },
-  { value: '<', label: 'Less Than (<)' },
-  { value: 'between', label: 'Between' },
-  { value: 'is null', label: 'Is Null' },
-  { value: 'is not null', label: 'Is Not Null' },
-  { value: 'contains', label: 'Contains (*val*)' },
+  { value: '=', label: 'Equals (=)', disabled: false },
+  { value: '<>', label: 'Not Equals (<>)', disabled: false },
+  { value: '>', label: 'Greater Than (>)', disabled: false },
+  { value: '<', label: 'Less Than (<)', disabled: false },
+  { value: 'between', label: 'Between', disabled: false },
+  { value: 'is null', label: 'Is Null', disabled: false },
+  { value: 'is not null', label: 'Is Not Null', disabled: false },
+  { value: 'contains', label: 'Contains (*val*)', disabled: false },
 ]
 
 interface Rule {
@@ -131,7 +131,7 @@ export const SearchQueryModal: React.FC<SearchQueryModalProps> = ({
     setRules(rules.map(r => (r.id === id ? { ...r, ...updates } : r)))
   }
 
-  const fieldOptions = fields.map(f => ({ value: f, label: f }))
+  const fieldOptions = fields.map(f => ({ value: f, label: f, disabled: false }))
 
   return (
     <Modal
@@ -250,12 +250,13 @@ export const SearchQueryModal: React.FC<SearchQueryModalProps> = ({
               Type your raw <code>_where</code> Master Data query here. You can
               use <code>OR</code>, parentheses, and complex expressions.
             </p>
+          <div style={{ minHeight: 150, fontFamily: 'monospace' }}>
             <Textarea
               value={rawWhere}
               onChange={(e: any) => setRawWhere(e.target.value)}
-              style={{ minHeight: 150, fontFamily: 'monospace' }}
               placeholder="(age > 18 AND status = *active*) OR createdIn is null"
             />
+          </div>
           </div>
         )}
       </div>

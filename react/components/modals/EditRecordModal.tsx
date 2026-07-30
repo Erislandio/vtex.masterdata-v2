@@ -117,7 +117,15 @@ export const EditRecordModal: React.FC<EditRecordModalProps> = ({
 
           // Any other type (object, array, number, integer, etc) gets a Textarea
           return (
-            <div key={key}>
+            <div
+              key={key}
+              style={{
+                fontFamily:
+                  type === 'object' || type === 'array'
+                    ? 'monospace'
+                    : 'inherit',
+              }}
+            >
               <Textarea
                 label={property.title || key}
                 value={
@@ -146,15 +154,6 @@ export const EditRecordModal: React.FC<EditRecordModalProps> = ({
                     ? ' Valid JSON required.'
                     : ''
                 }`}
-                style={{
-                  fontFamily:
-                    type === 'object' || type === 'array'
-                      ? 'monospace'
-                      : 'inherit',
-                  resize: 'vertical',
-                  minHeight:
-                    type === 'object' || type === 'array' ? 100 : undefined,
-                }}
               />
             </div>
           )
