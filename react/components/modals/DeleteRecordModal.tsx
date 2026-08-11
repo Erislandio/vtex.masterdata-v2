@@ -27,7 +27,7 @@ export const DeleteRecordModal: React.FC<DeleteRecordModalProps> = ({
   const intl = useIntl()
 
   const isBulk = Array.isArray(deletingId)
-  const count = isBulk ? deletingId.length : 1
+  const count = Array.isArray(deletingId) ? deletingId.length : 1
 
   return (
     <Modal
