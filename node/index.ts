@@ -1,14 +1,14 @@
 import {
   ClientsConfig,
   LRUCache,
+  RecorderState,
   Service,
   ServiceContext,
-  RecorderState,
 } from '@vtex/api'
 
 import { Clients } from './clients'
-import { Query } from './resolvers/query'
 import { Mutation } from './resolvers/mutation'
+import { Query } from './resolvers/query'
 
 const TREE_SECONDS_MS = 3 * 1000
 const CONCURRENCY = 10
@@ -39,7 +39,7 @@ declare global {
   }
 }
 
-export default new Service({
+export default new Service<Clients, State, ServiceContext>({
   clients,
   graphql: {
     resolvers: {

@@ -15,7 +15,9 @@
     "typescript": "3.9.7"
   },
   "resolutions": {
-    "expect": "28.1.3",
-    "pretty-format": "28.1.3"
+    "expect": "25.5.0",
+    "@types/express-serve-static-core": "4.16.0",
+    "@opentelemetry/api": "1.4.1",
+    "@types/koa": "2.13.1"
   }
 }

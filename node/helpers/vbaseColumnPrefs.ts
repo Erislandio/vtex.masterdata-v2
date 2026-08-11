@@ -1,5 +1,3 @@
-import { Context } from '../clients'
-
 export const VBASE_BUCKET_PREFS = 'mdv2_prefs'
 
 export async function readColumnPrefs(
