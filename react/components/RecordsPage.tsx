@@ -22,6 +22,7 @@ import {
   updateRecord,
 } from '../services/masterdata'
 import { ColumnsModal } from './modals/ColumnsModal'
+import { DeleteAllModal } from './modals/DeleteAllModal'
 import { DeleteRecordModal } from './modals/DeleteRecordModal'
 import { EditRecordModal } from './modals/EditRecordModal'
 import { SearchQueryModal } from './modals/SearchQueryModal'
@@ -86,13 +87,16 @@ const RecordsPage: React.FC<{ runtime: any }> = ({ runtime }) => {
 
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+  const [isDeleteAllModalOpen, setIsDeleteAllModalOpen] = useState(false)
   const [editingRecord, setEditingRecord] = useState<Record<
     string,
     any
   > | null>(null)
   const [fieldsJson, setFieldsJson] = useState('{}')
   const [jsonError, setJsonError] = useState<string | null>(null)
-  const [deletingId, setDeletingId] = useState<string | null>(null)
+  const [deletingId, setDeletingId] = useState<string | string[] | null>(null)
+  const [deleteProgress, setDeleteProgress] = useState({ current: 0, total: 0 })
+  const [tableKey, setTableKey] = useState(0)
 
   const [availableColumns, setAvailableColumns] = useState<string[]>([])
   const [isColumnsModalOpen, setIsColumnsModalOpen] = useState(false)
@@ -288,7 +292,8 @@ const RecordsPage: React.FC<{ runtime: any }> = ({ runtime }) => {
     } catch (err) {
       if (
         (err as any).message &&
-        ((err as any).message.includes('401') || (err as any).message.includes('403'))
+        ((err as any).message.includes('401') ||
+          (err as any).message.includes('403'))
       ) {
         showAlert('error', 'masterdatav2.unauthorized-error')
       } else {
@@ -304,14 +309,27 @@ const RecordsPage: React.FC<{ runtime: any }> = ({ runtime }) => {
 
     setDeleting(true)
     try {
-      await deleteRecord(entityId, deletingId)
+      if (Array.isArray(deletingId)) {
+        setDeleteProgress({ current: 0, total: deletingId.length })
+        for (let i = 0; i < deletingId.length; i++) {
+          const docId = deletingId[i]
+          if (docId) {
+            await deleteRecord(entityId, docId)
+          }
+          setDeleteProgress({ current: i + 1, total: deletingId.length })
+        }
+      } else {
+        await deleteRecord(entityId, deletingId)
+      }
       setIsDeleteModalOpen(false)
       showAlert('success', 'masterdatav2.success-delete')
+      setTableKey(k => k + 1)
       load()
     } catch (err) {
       if (
         (err as any).message &&
-        ((err as any).message.includes('401') || (err as any).message.includes('403'))
+        ((err as any).message.includes('401') ||
+          (err as any).message.includes('403'))
       ) {
         showAlert('error', 'masterdatav2.unauthorized-error')
       } else {
@@ -320,6 +338,52 @@ const RecordsPage: React.FC<{ runtime: any }> = ({ runtime }) => {
     } finally {
       setDeleting(false)
       setDeletingId(null)
+      setDeleteProgress({ current: 0, total: 0 })
+    }
+  }
+
+  const handleConfirmDeleteAll = async () => {
+    setIsDeleteAllModalOpen(false)
+    setDeleting(true)
+    setDeleteProgress({ current: 0, total: total })
+    try {
+      let deletedCount = 0
+      let hasMore = true
+      while (hasMore) {
+        // Buscamos sempre a página 1 porque estamos deletando os itens
+        const { records: batch } = await searchRecords(
+          entityId,
+          schemaName,
+          1,
+          50,
+          searchWhere
+        )
+        if (batch.length === 0) {
+          hasMore = false
+          break
+        }
+        for (const record of batch) {
+          await deleteRecord(entityId, record.id)
+          deletedCount++
+          setDeleteProgress({ current: deletedCount, total: total })
+        }
+      }
+      showAlert('success', 'masterdatav2.success-delete')
+      setTableKey(k => k + 1)
+      load()
+    } catch (err) {
+      if (
+        (err as any).message &&
+        ((err as any).message.includes('401') ||
+          (err as any).message.includes('403'))
+      ) {
+        showAlert('error', 'masterdatav2.unauthorized-error')
+      } else {
+        showAlert('error', 'masterdatav2.error')
+      }
+    } finally {
+      setDeleting(false)
+      setDeleteProgress({ current: 0, total: 0 })
     }
   }
 
@@ -488,6 +552,16 @@ const RecordsPage: React.FC<{ runtime: any }> = ({ runtime }) => {
               })}
             </Button>
           </div>
+          {total > 0 && (
+            <div className="ml3">
+              <Button
+                variation="danger"
+                onClick={() => setIsDeleteAllModalOpen(true)}
+              >
+                Delete All
+              </Button>
+            </div>
+          )}
         </div>
 
         {loading ? (
@@ -496,6 +570,7 @@ const RecordsPage: React.FC<{ runtime: any }> = ({ runtime }) => {
           </div>
         ) : (
           <RecordsTable
+            tableKey={String(tableKey)}
             records={records}
             total={total}
             page={page}
@@ -508,6 +583,10 @@ const RecordsPage: React.FC<{ runtime: any }> = ({ runtime }) => {
             onEdit={handleEdit}
             onDelete={id => {
               setDeletingId(id)
+              setIsDeleteModalOpen(true)
+            }}
+            onBulkDelete={(ids: string[]) => {
+              setDeletingId(ids)
               setIsDeleteModalOpen(true)
             }}
           />
@@ -543,6 +622,15 @@ const RecordsPage: React.FC<{ runtime: any }> = ({ runtime }) => {
         onConfirm={handleDelete}
         deleting={deleting}
         deletingId={deletingId}
+        deleteProgress={deleteProgress}
+      />
+
+      <DeleteAllModal
+        isOpen={isDeleteAllModalOpen}
+        onClose={() => setIsDeleteAllModalOpen(false)}
+        onConfirm={handleConfirmDeleteAll}
+        deleting={deleting}
+        total={total}
       />
 
       <ViewRecordModal

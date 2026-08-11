@@ -23,6 +23,8 @@ interface RecordsTableProps {
   onView: (record: Record<string, any>) => void
   onEdit: (record: Record<string, any>) => void
   onDelete: (id: string) => void
+  onBulkDelete?: (ids: string[]) => void
+  tableKey?: string
 }
 
 export const RecordsTable: React.FC<RecordsTableProps> = ({
@@ -37,6 +39,8 @@ export const RecordsTable: React.FC<RecordsTableProps> = ({
   onView,
   onEdit,
   onDelete,
+  onBulkDelete,
+  tableKey,
 }) => {
   const [objectModal, setObjectModal] = useState<{
     isOpen: boolean
@@ -125,12 +129,33 @@ export const RecordsTable: React.FC<RecordsTableProps> = ({
     },
   }
 
+  const bulkActions = {
+    texts: {
+      secondaryActionsLabel: 'Actions',
+      rowsSelected: (qty: number) => <>{qty} selected</>,
+      selectAll: 'Select all',
+      allRowsSelected: (qty: number) => <>{qty} selected</>,
+    },
+    totalItems: total,
+    main: {
+      label: 'Delete',
+      handleCallback: (params: { selectedRows: any[] }) => {
+        const ids = params.selectedRows.map(row => row.id)
+        if (onBulkDelete) {
+          onBulkDelete(ids)
+        }
+      },
+    },
+  }
+
   return (
     <>
       <Table
+        key={tableKey}
         schema={tableSchema}
         items={records}
         emptyStateLabel={emptyStateLabel}
+        bulkActions={bulkActions as any}
         pagination={{
           onNextClick: () => setPage(p => p + 1),
           onPrevClick: () => setPage(p => Math.max(1, p - 1)),

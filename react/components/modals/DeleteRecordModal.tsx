@@ -12,7 +12,8 @@ interface DeleteRecordModalProps {
   onClose: () => void
   onConfirm: () => void
   deleting: boolean
-  deletingId: string | null
+  deletingId: string | string[] | null
+  deleteProgress?: { current: number; total: number }
 }
 
 export const DeleteRecordModal: React.FC<DeleteRecordModalProps> = ({
@@ -21,8 +22,12 @@ export const DeleteRecordModal: React.FC<DeleteRecordModalProps> = ({
   onConfirm,
   deleting,
   deletingId,
+  deleteProgress,
 }) => {
   const intl = useIntl()
+
+  const isBulk = Array.isArray(deletingId)
+  const count = isBulk ? deletingId.length : 1
 
   return (
     <Modal
@@ -31,7 +36,7 @@ export const DeleteRecordModal: React.FC<DeleteRecordModalProps> = ({
       onClose={onClose}
       bottomBar={
         <div className="flex justify-end gap3">
-          <Button variation="tertiary" onClick={onClose}>
+          <Button variation="tertiary" onClick={onClose} disabled={deleting}>
             {intl.formatMessage(messages.cancelButton)}
           </Button>
           <Button variation="danger" onClick={onConfirm} isLoading={deleting}>
@@ -41,8 +46,21 @@ export const DeleteRecordModal: React.FC<DeleteRecordModalProps> = ({
       }
     >
       <div className="pa4">
-        <p className="f5">{intl.formatMessage(messages.confirmDelete)}</p>
-        {deletingId && <p className="f7 c-muted-2 mt2 mb0">ID: {deletingId}</p>}
+        <p className="f5">
+          {isBulk
+            ? `Are you sure you want to delete ${count} record(s)?`
+            : intl.formatMessage(messages.confirmDelete)}
+        </p>
+        {!isBulk && deletingId && (
+          <p className="f7 c-muted-2 mt2 mb0">ID: {deletingId}</p>
+        )}
+        {isBulk && deleting && deleteProgress && deleteProgress?.total > 0 && (
+          <div className="mt4">
+            <p className="f6 c-muted-1">
+              Deleting... {deleteProgress?.current} / {deleteProgress?.total}
+            </p>
+          </div>
+        )}
       </div>
     </Modal>
   )

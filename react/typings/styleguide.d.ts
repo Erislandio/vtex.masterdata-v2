@@ -131,8 +131,22 @@ declare module 'vtex.styleguide' {
   interface TableProps {
     schema: TableSchema
     items: TableItem[]
+    updateTableKey?: string
     indexColumn?: boolean
     emptyStateLabel?: string
+    bulkActions?: {
+      texts: {
+        secondaryActionsLabel: string
+        rowsSelected: (qty: number) => string
+        selectAll: string
+        allRowsSelected: (qty: number) => string
+      }
+      totalItems: number
+      main: {
+        label: string
+        handleCallback: (params: { selectedRows: any[] }) => void
+      }
+    }
     pagination?: {
       onNextClick: () => void
       onPrevClick: () => void
